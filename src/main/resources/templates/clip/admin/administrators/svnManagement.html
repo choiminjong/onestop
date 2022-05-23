@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/common :: head"></head>
+
+<body>
+<div id="wrapper">
+
+  <!--메뉴-->
+  <nav class="navbar-default navbar-static-side" role="navigation" th:replace="fragments/common :: menu"></nav>
+
+  <div id="page-wrapper" class="gray-bg">
+
+    <!--프로필-->
+    <div class="row border-bottom" th:replace="fragments/common :: profile"></nav></div>
+
+    <!--Content Body-->
+    <div id="svn-container" class="wrapper wrapper-content animated fadeInRight">
+      <!-- 1. 서버 선택 시작-->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="ibox">
+            <div class="ibox-content">
+              <div class="form-inline">
+                <div class="form-group">
+                  <select class="form-control dmzt-select-domain">
+                    <option value="1">DEV</option>
+                  </select>
+                </div>
+                <button id="user-download-button" class="btn btn-default dmzt-download-button">사용자&nbsp;<span class="fa fa-file-excel-o"></span></button>
+                <button id="user-int-button" class="btn btn-warning dmzt-init-user-button">사용자</button>
+                <button id="group-int-button" class="btn btn-warning dmzt-init-group-button">그룹</button>
+                <button id="permission-init-button" class="btn btn-warning dmzt-init-perm-button">권한</button>
+                - 초기화 버튼 검토 필요
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="bg-primary p-h-sm b-r-lg m-b-md">
+            <a data-toggle="collapse" href="#collapse-svn-user-management" role="button" aria-expanded="true" aria-controls="collapse-svn-user-management" class="">
+              <h2 class="text-center text-white"><strong>User: </strong><strong id="user-count"></strong></h2></a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="bg-primary p-h-sm b-r-lg m-b-md">
+            <a data-toggle="collapse" href="#collapse-svn-group-management" role="button" aria-expanded="false" aria-controls="collapse-svn-group-management">
+              <h2 class="text-center text-white"><strong>Group: </strong><strong id="group-count"></strong></h2></a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="bg-primary p-h-sm b-r-lg m-b-md">
+            <a data-toggle="collapse" href="#collapse-svn-repo-management" role="button" aria-expanded="false" aria-controls="collapse-svn-repo-management">
+              <h2 class="text-center text-white"><strong>Repository: </strong><strong id="repository-count"></strong></h2></a>
+          </div>
+        </div>
+      </div>
+      <!-- 1. 서버 선택 끝-->
+
+      <!-- 2. 사용자 시작-->
+      <div class="row collapse dmzt-container"  id="collapse-svn-user-management" aria-expanded="true">
+        <div class="col-lg-4">
+          <div class="ibox">
+            <div class="ibox-title">
+              <div class="input-group">
+                <input type="text" id="input-svn-employee-search" class="form-control dmzt-query" value="" placeholder="User name is ..."> <span class="input-group-btn">
+                                <button type="button" id="btn-search-user" class="btn btn-default dmzt-search-button" data-grid="#grid-svn-search-employees"><span class="fa fa-search"></span></button>
+                            </span>
+              </div>
+            </div>
+
+            <div class="ibox-content" style="height: 290px;">
+              <div class="dmzt-search-user-detail">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="text-center" id="user-image">
+                    </div>
+                  </div>
+                  <div class="col-sm-8" id="user-detail">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="ibox">
+            <div class="ibox-title">
+              <h5>사용자가 속한 Group</h5>
+              <div class="ibox-tools">
+                <span class="label label-info label-user-name"></span>
+              </div>
+            </div>
+            <div class="ibox-content" style="overflow:auto; height:300px">
+              <div class="row">
+                <div class="col-sm-12">
+                  <ul class="unstyled dmzt-user-groups">
+                    <ul id="ul-groupbyuser-list" class="unstyled"></ul>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="ibox">
+            <div class="ibox-title">
+              <h5>사용자가 접근 가능한 Repository</h5>
+              <div class="ibox-tools">
+                <span class="label label-info label-user-repo"></span>
+              </div>
+            </div>
+            <div class="ibox-content" style="overflow:scroll;height:300px;">
+              <ul id="user-permission-tree" class="ztree"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 2. 사용자 끝-->
+
+      <!-- 3. 그룹 시작-->
+      <div class="row collapse dmzt-container" id="collapse-svn-group-management">
+        <div class="col-lg-3">
+          <div class="ibox">
+            <div class="ibox-title">
+              <div class="input-group">
+                <input type="text" id="input-search-group"class="form-control input-sm dmzt-query" placeholder="Group name is ..."> <span class="input-group-btn">
+                            <button type="button" id="btn-search-group"  class="btn btn-sm btn-default dmzt-search-button"><span class="fa fa-search"></span></button>
+                        </span>
+              </div>
+
+            </div>
+            <div class="ibox-content" style="overflow:auto; height:340px">
+              <ul id="ul-group-list" class="unstyled"></ul>
+            </div>
+            <div class="ibox-footer">
+              <div class="input-group">
+                <input type="text" id ="input-add-new-group"class="form-control input-sm" placeholder="New Group name is ...">
+                <span class="input-group-btn">
+                            <button type="button" id ="btn-add-group-button" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span></button>
+                        </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="ibox">
+
+            <div class="ibox-title">
+              <h5>그룹에 속한 사용자 목록</h5>
+              <div class="ibox-tools">
+                <span class="label label-warning-light label-group-name"></span>
+              </div>
+            </div>
+            <div class="ibox-content" style="height:340px; overflow:auto;">
+              <table id ="svn-group-member-list" class="table table-striped">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody class="tbody-svn-group-member-list"></tbody>
+              </table>
+            </div>
+            <div class="ibox-footer">
+              <div class="input-group">
+                <select id ="input-group-users" class="" style="width: 100%;" multiple="multiple"  placeholder="User name is ..."></select>
+                <span class="input-group-btn">
+                <button type="button" id ="add-user-to-group-button"class="btn btn-primary"><span class="fa fa-plus"></span></button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="ibox">
+            <div class="ibox-title">
+              <h5>그룹이 가지고 있는 권한</h5>
+              <div class="ibox-tools">
+                <span id="label-group-namedetail" class="label label-warning-light label-group-namedetail"></span>
+              </div>
+            </div>
+            <div class="ibox-content" style="height:370px; overflow:auto;">
+              <ul id="group-permission-tree" class="ztree">
+              </ul>
+            </div>
+            <div class="ibox-footer">
+              <div class="form-inline">
+                <!--
+                <select class="form-control input-sm select-permission-level">
+                    <option value="rw">Read&amp;Write</option>
+                    <option value="r">Read Only</option>
+                </select>
+                <input type="text" id ="input-repository" class="form-control input-sm input-repository" placeholder="Repository is...">
+                <input type="text" id ="input-group-repository-path"class="form-control input-sm input-repository-path" placeholder="Path is...">
+                <button type="button" class="btn btn-sm btn-primary dmzt-add-group-to-repository-button"><span class="fa fa-plus"></span></button>
+                <button type="button" class="btn btn-sm btn-danger dmzt-remove-group-from-repository-button"><span class="fa fa-trash"></span></button>
+                -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 3. 그룹 끝-->
+
+      <!-- 4. 레파지토리 시작 -->
+      <div id="collapse-svn-repo-management" class="row collapse dmzt-container">
+        <div class="col-lg-5">
+          <div class="ibox">
+            <div class="ibox-title">
+              <div class="input-group">
+                <input type="text" id="input-search-repo" class="form-control input-sm dmzt-query" placeholder="Repository name is ..."> <span class="input-group-btn">
+                            <button type="button" id="btn-search-repo" class="btn btn-sm btn-default dmzt-search-button"><span class="fa fa-search"></span></button>
+                        </span>
+              </div>
+
+            </div>
+            <div class="ibox-content" style="height:410px; overflow:auto;">
+              <ul id="repo-permission-tree" class="ztree"></ul>
+            </div>
+            <div class="ibox-footer">
+              <div class="input-group">
+                <input type="text" id ="input-add-new-repository"class="form-control input-sm" placeholder="New Repository name is ...">
+                <span class="input-group-btn">
+                            <button type="button" id ="btn-add-repository-button" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span></button>
+                        </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="ibox">
+            <div class="ibox-title">
+              <h5>레파지토리 권한 설정</h5>
+              <div class="ibox-tools">
+                <span class="label label-primary label-repository-name"></span>
+                <span class="label label-info label-repository-path-name"></span>
+              </div>
+            </div>
+            <div class="ibox-content" style="height:450px; overflow:auto;">
+              <div class="row">
+
+                <div class="col-sm-8 b-r">
+                  <div class=""></div>
+                  <div class="ibox-content" style="height:340px; overflow:auto;">
+                    <table id ="svn-group-permission-detail" class="table table-striped">
+                      <thead>
+                      <tr>
+                        <th>Role</th>
+                        <th>Level</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Remove</th>
+                      </tr>
+                      </thead>
+                      <tbody class="tbody-svn-group-permission-detail"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-horizontal m-l-md">
+                    <div class="form-group">
+                      <label>Level</label>
+                      <select class="form-control select-permission-level">
+                        <option value="rw">Read&amp;Write</option>
+                        <option value="r">Read Only</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Repository</label>
+                      <input type="text" id ="input-repositorys" class="form-control input-repository" placeholder="Repo is...">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Path</label>
+                      <input type="text" id ="input-repository-path" class="form-control input-repository-path" placeholder="Path is...">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Group</label>
+                      <select id ="input-repository-groups" class="" style="width: 100%;" multiple="multiple"></select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>User</label>
+                      <select id ="input-repository-users" class="" style="width: 100%;" multiple="multiple"></select>
+                    </div>
+
+                    <div>
+                      <button type="button" id ="add-repo-permission-button"class="btn btn-sm btn-primary pull-right m-t-n-xs">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 4. 레파지토리 끝 -->
+    </div>
+
+
+    <!--Content Body END-->
+<div class="footer" th:replace="fragments/common :: footer"></div>
+    <script>
+      $(document).ready(function() {
+        $("#input-group-users").select2();
+        $("#input-repository-groups").select2();
+        $("#input-repository-users").select2();
+      });
+
+      // function selectAllfun(){
+      //   $('#input-group-users').select2({
+      //     ajax: {
+      //       url: '/rest/api/v1/svn/user/',
+      //       data: function (params,data) {
+      //         var query = {
+      //           search: params.term,
+      //           type: 'public'
+      //         }
+      //         // Query parameters will be ?search=[term]&type=public
+      //         return query;
+      //       },
+      //       processResults: function (data){
+      //         return {
+      //           results: $.map(data.Users, function(obj, index){
+      //             return { id: obj.name, text: obj.name };
+      //           })
+      //         };
+      //       },
+      //     }
+      //   });
+      //
+      //   $('#input-repository-groups').select2({
+      //     ajax: {
+      //       url: '/rest/api/v1/svn/group/',
+      //       data: function (params) {
+      //         var query = {
+      //           search: params.term,
+      //           type: 'public'
+      //         }
+      //         // Query parameters will be ?search=[term]&type=public
+      //         return query;
+      //       },
+      //       processResults: function (data){
+      //         return {
+      //           results: $.map(data.Groups, function(obj, index){
+      //             return { id: obj.name, text: obj.name };
+      //           })
+      //         };
+      //       },
+      //     }
+      //   });
+      //
+      //
+      //   $('#input-repository-users').select2({
+      //     ajax: {
+      //       url: '/rest/api/v1/svn/user/',
+      //       data: function (params,data) {
+      //         var query = {
+      //           search: params.term,
+      //           type: 'public'
+      //         }
+      //         // Query parameters will be ?search=[term]&type=public
+      //         return query;
+      //       },
+      //       processResults: function (data){
+      //         return {
+      //           results: $.map(data.Users, function(obj, index){
+      //             return { id: obj.name, text: obj.name };
+      //           })
+      //         };
+      //       },
+      //     }
+      //   });
+      // }
+
+    </script>
+</div>
+<!--page-wrapper END-->
+</div> <!--wrapper-->
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/common :: head"></head>
+
+<body>
+<div id="wrapper">
+
+    <!--메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation" th:replace="fragments/common :: menu"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!--프로필-->
+        <div class="row border-bottom" th:replace="fragments/common :: profile"></nav></div>
+
+        <!--Content Body-->
+        <div id="svn-container" class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="bg-primary p-h-sm b-r-lg m-b-md">
+                        <a data-toggle="collapse" href="#collapse-confluence-search-users" aria-expanded="false" aria-controls="collapse-confluence-search-users" class="">
+                            <h2 class="text-center text-white"><strong>User: </strong><strong id="user-count"></strong></h2></a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bg-primary p-h-sm b-r-lg m-b-md">
+                        <a data-toggle="collapse" href="#collapse-confluence-group-management" aria-expanded="false" aria-controls="collapse-confluence-group-management">
+                            <h2 class="text-center text-white"><strong>Group: </strong><strong id="group-count"></strong></h2></a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bg-primary p-h-sm b-r-lg m-b-md">
+                        <a data-toggle="collapse" href="#collapse-confluence-space-group" aria-expanded="false" aria-controls="collapse-confluence-space-group">
+                            <h2 class="text-center text-white"><strong>Space: </strong><strong id="space-count"></strong></h2></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. 사용자 관리 dmzt-user-search-container -->
+            <div class="row  collapse dmzt-container" id="collapse-confluence-search-users" aria-expanded="false">
+                <div class="col-lg-6">
+                    <div class="ibox" >
+
+                        <div class="ibox-title">
+                            <div class="form-inline">
+                                <select id="employeeearchtype" class="form-control select-search-type">
+                                    <option value="2">ID</option>
+                                    <option value="1">사용자명</option>
+                                    <option value="3">사번</option>
+                                </select>
+                                <input type="text" id="input-search-employees" class="form-control dmzt-query" placeholder="User name is..." />
+                                <button type="button" id="btn-search-employees" class="btn btn-primary dmzt-search-button"><span class="fa fa-search"></span></button>
+                            </div>
+                        </div>
+
+                        <div class="ibox-content" style="overflow:auto;  height:390px;">
+                            <div>
+                                <table id ="employeetable" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>ID</th>
+                                        <th>성명</th>
+                                        <th>회사</th>
+                                        <th>부서</th>
+                                        <th>Email</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="user-list" ></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>사용자 그룹권한</h5>
+                            <div class="ibox-tools">
+                                <span class="label label-info label-user-name"></span>
+                            </div>
+                        </div>
+                        <div class="ibox-content" style="overflow:auto;  height:390px;">
+                            <div>
+                                <table id ="confUserGroups" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>그룹</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>접근가능한 공간</h5>
+                            <div class="ibox-tools">
+                                <span class="label label-info label-user-name"></span>
+                            </div>
+                        </div>
+                        <div class="ibox-content" style="overflow:auto;  height:390px;">
+                            <div>
+                                <table id ="confUserSpace" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>공간</th>
+                                        <th>공간키</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 그룹 관리 collapse-confluence-group-management -->
+            <div class="row collapse dmzt-container" id="collapse-confluence-group-management">
+                <div class="col-lg-5">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <div class="input-group">
+                                <input type="text" id="input-search-groups" class="form-control dmzt-query" placeholder="Group name is ..."> <span class="input-group-btn">
+                                    <button type="button" id="btn-search-groups" class="btn btn-sm btn-default dmzt-search-button"><span class="fa fa-search"></span></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ibox-content" style="overflow:auto;  height:390px;">
+                            <div>
+                                <table id ="confGroups" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>그룹명</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id ="group-list" class="tbody-employee-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>그룹에 속한 사용자 목록</h5>
+                            <div class="ibox-tools">
+                                <span class="label label-warning-light label-group-name"></span>
+                                <button onclick="exportTableToExcel('confGroupMembers', 'group-members')" class="btn btn-primary btn-sm dmzt-download-group-members-button"><span class="fa fa-file-excel-o"></span></button>
+                            </div>
+                        </div>
+                        <div class="ibox-content" style="overflow:auto;  height:390px;">
+                            <div>
+                                <table id ="confGroupMembers" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>계정</th>
+                                        <th>상태</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id ="group-member-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>사용자가 없는 그룹 조회 </h5>
+                            </div>
+                            <div class="ibox-title" style="border-top-width:1px;min-height:60px;">
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <button type="button"  id="btn-search-userless-groups" class="btn btn btn-success dmzt-search-zerogroup-button">Userless Group Search</button>
+                                        &nbsp&nbsp
+                                        <button onclick="exportTableToExcel('confUserlessGroups', 'userless-groups')" class="btn btn-primary btn-sm dmzt-download-group-members-button">
+                                            <span class="fa fa-file-excel-o"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!--
+                                <div class="col-sm-6">
+                                    <div class="input-group pull-right">
+                                        <button type="button" class="btn btn btn-danger dmzt-remove-zerogroup-button">Remove Group</button>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                            <div class="ibox-content" style="overflow:auto;  height:390px;">
+                                <div>
+                                    <table id ="confUserlessGroups" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>NO</th>
+                                            <th>그룹이름</th>
+                                            <th>생성일</th>
+                                            <th>DirectoryName</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id ="userless-groups-list"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 5. 그룹By프로젝트 관리 끝-->
+
+            <!-- 5. 그룹By스페이스 관리 collapse-confluence-space-group-->
+            <div class="collapse" id="collapse-confluence-space-group">
+                <div class="row">
+
+                    <div class="col-lg-8">
+                        <div class="ibox" >
+
+                            <div class="ibox-title">
+                                <div class="form-inline">
+                                    <select id="" class="form-control select-search-type">
+                                        <option value="2">ID</option>
+                                        <option value="1">사용자명</option>
+                                        <option value="3">사번</option>
+                                    </select>
+                                    <input type="text" id="input-search-space" class="form-control dmzt-query" placeholder="User name is..." />
+                                    <button type="button" id="btn-search-space" class="btn btn-primary dmzt-search-button"><span class="fa fa-search"></span></button>
+                                </div>
+                            </div>
+
+                            <div class="ibox-content" style="overflow:auto;  height:390px;">
+                                <div>
+                                    <table id ="spacetable" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>NO</th>
+                                            <th>ID</th>
+                                            <th>성명</th>
+                                            <th>회사</th>
+                                            <th>부서</th>
+                                            <th>Email</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="space-list" ></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <div class="input-group">
+                                    <input type="text" id ='input-search-group-to-spaces' class="form-control dmzt-query" placeholder="그룹으로 접근가능한 공간조회"> <span class="input-group-btn">
+                                    <button type="button" id="btn-search-group-to-spaces" class="btn btn-default dmzt-search-button"><span class="fa fa-search"></span></button>
+                                </div>
+                            </div>
+
+                            <div class="ibox-content" style="overflow:auto;  height:400px; ">
+                                <div>
+                                    <table id ="dmzt-space-permission-list" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">Type</th>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">전체보기</th>
+                                            <th class="text-center">페이지내보내기</th>
+                                            <th class="text-center">페이지추가</th>
+                                            <th class="text-center">페이지삭제</th>
+
+                                            <th class="text-center">블로그추가</th>
+                                            <th class="text-center">블로그삭제</th>
+                                            <th class="text-center">댓글추가</th>
+                                            <th class="text-center">댓글삭제</th>
+
+                                            <th class="text-center">첨부파일추가</th>
+                                            <th class="text-center">첨부파일삭제</th>
+                                            <th class="text-center">제한추가/삭제</th>
+                                            <th class="text-center">메일삭제</th>
+                                            <th class="text-center">공간내보내기</th>
+
+                                            <th class="text-center">공간관리</th>
+                                            <th class="text-center">전체선택</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class=""></td>
+                                            <td><strong></strong></td>
+                                            <td  class="text-center">
+                                                <input type="checkbox" id="checkbox-viewSpace" class="i-checks" >
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-exportPage" class="i-checks" >
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-editSpace" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-removePage" class="i-checks" >
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-editBlog" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-removeBlog" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-comment" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-removeComment" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-createAttachment" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-removeAttachment" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-setPagePermissions" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-removeMail" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-exportSpace" class="i-checks">
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" id="checkbox-setSpacePermissions" class="i-checks">
+                                            </td>
+                                            <td class="text-center" id="td-select">
+                                                <a id="a-select-all">전체선택</a>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline btn-sm btn-info dmzt-edit-permission-button" type="button">
+                                                    <i class="fa fa-check"></i></button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="ibox" >
+                            <div class="ibox-title">
+                                <h5>공간 관리자 목록</h5>
+                                <div class="ibox-tools">
+                                    <span class="label label-warning-light label-group-name"></span>
+                                    <button onclick="exportTableToExcel('confSpaceAdminMembers', 'space-admin-list')" class="btn btn-primary btn-sm dmzt-download-group-members-button"><span class="fa fa-file-excel-o"></span></button>
+                                </div>
+                            </div>
+                            <div class="ibox-content" style="overflow:auto;  height:400px;">
+                                <div>
+                                    <table id ="confSpaceAdminMembers" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>NO</th>
+                                            <th>공간키</th>
+                                            <th>개인</th>
+                                            <th>이메일</th>
+                                            <th>그룹멤버</th>
+                                            <th>이메일</th>
+                                            <th>그룹명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody  ></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- 4. 레파지토리 끝 -->
+        </div>
+
+
+        <!--Content Body END-->
+        <div class="footer" th:replace="fragments/common :: footer"></div>
+        <script>
+            $(document).ready(function() {
+                $("#input-group-users").select2();
+                $("#input-repository-groups").select2();
+                $("#input-repository-users").select2();
+            });
+
+            // function selectAllfun(){
+            //   $('#input-group-users').select2({
+            //     ajax: {
+            //       url: '/rest/api/v1/svn/user/',
+            //       data: function (params,data) {
+            //         var query = {
+            //           search: params.term,
+            //           type: 'public'
+            //         }
+            //         // Query parameters will be ?search=[term]&type=public
+            //         return query;
+            //       },
+            //       processResults: function (data){
+            //         return {
+            //           results: $.map(data.Users, function(obj, index){
+            //             return { id: obj.name, text: obj.name };
+            //           })
+            //         };
+            //       },
+            //     }
+            //   });
+            //
+            //   $('#input-repository-groups').select2({
+            //     ajax: {
+            //       url: '/rest/api/v1/svn/group/',
+            //       data: function (params) {
+            //         var query = {
+            //           search: params.term,
+            //           type: 'public'
+            //         }
+            //         // Query parameters will be ?search=[term]&type=public
+            //         return query;
+            //       },
+            //       processResults: function (data){
+            //         return {
+            //           results: $.map(data.Groups, function(obj, index){
+            //             return { id: obj.name, text: obj.name };
+            //           })
+            //         };
+            //       },
+            //     }
+            //   });
+            //
+            //
+            //   $('#input-repository-users').select2({
+            //     ajax: {
+            //       url: '/rest/api/v1/svn/user/',
+            //       data: function (params,data) {
+            //         var query = {
+            //           search: params.term,
+            //           type: 'public'
+            //         }
+            //         // Query parameters will be ?search=[term]&type=public
+            //         return query;
+            //       },
+            //       processResults: function (data){
+            //         return {
+            //           results: $.map(data.Users, function(obj, index){
+            //             return { id: obj.name, text: obj.name };
+            //           })
+            //         };
+            //       },
+            //     }
+            //   });
+            // }
+
+        </script>
+    </div>
+    <!--page-wrapper END-->
+</div> <!--wrapper-->
+</body>
+</html>

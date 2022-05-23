@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/common :: head"></head>
+
+<body>
+
+<div id="wrapper">
+
+    <!--메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation" th:replace="fragments/common :: menu"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!--프로필-->
+        <div class="row border-bottom" th:replace="fragments/common :: profile"></nav></div>
+
+        <!--Content Body-->
+        <div id="employee-container" class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ibox-title">
+                        <h5>인사 정보 - 다운로드</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <span>ID 리스트로 인사 정보를 추출합니다.</span>&nbsp&nbsp&nbsp
+                            <button type="button" id="btn-textarea" class="btn btn-primary dmzt-search-button"><span class="fa fa-search">Export</span></button>
+                        </div>
+                        <form id="form-employee-download">
+                            <div class="form-group">
+                                <textarea id="textarea-id" name="text" style="width:300px; height: 800px;"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <div class="form-inline">
+                                <select id="employeeearchtype" class="form-control select-search-type">
+                                    <option value="1">사용자명</option>
+                                    <option value="2">ID</option>
+                                    <option value="3">사번</option>
+                                </select>
+                                <input type="text" id="input-search-employees" class="form-control dmzt-query" placeholder="User name is..." />
+                                <button type="button" id="btn-search-employees" class="btn btn-primary dmzt-search-button"><span class="fa fa-search"></span></button>
+                            </div>
+                        </div>
+
+                        <div class="ibox-title">
+                            <div class="form-inline">
+                        <div class="ibox-content" style="height:800px; overflow:auto;">
+                            <div>
+                                <table id ="employeetable" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>ID</th>
+                                        <th>성명</th>
+                                        <th>회사</th>
+                                        <th>부서</th>
+                                        <th>Email</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="tbody-employee-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--footer-->
+        <div class="footer" th:replace="fragments/common :: footer"></div>
+
+    </div>
+
+</div>
+</body>
+</html>

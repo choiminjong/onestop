@@ -1,0 +1,17 @@
+
+<div th:fragment="menu(menu)">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                    <a th:href="@{/admin/accounts}" style="margin:5px;" class="nav-link" th:classappend="${menu} == 'accounts'? 'nav-link active'">사용자 관리</a>
+                    <a th:href="@{/admin/roles}" style="margin:5px;" class="nav-link" th:classappend="${menu} == 'roles'? 'nav-link active'">롤 관리</a>
+                    <a th:href="@{/admin/resources}" style="margin:5px;" class="nav-link" th:classappend="${menu} == 'resources'? 'nav-link active'">리소스 관리</a>
+                    <a th:href="@{/admin/delegate}" style="margin:5px;" class="nav-link" th:classappend="${menu} == 'delegate'? 'nav-link active'">그룹 관리</a>
+                    <a th:href="@{/admin/category}" style="margin:5px;" class="nav-link" th:classappend="${menu} == 'category'? 'nav-link active'">카테고리 관리</a>
+                    <a th:href="@{/admin/boards}" style="margin:5px;" class="nav-link" th:classappend="${menu} == 'boards'? 'nav-link active'">게시글 관리</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

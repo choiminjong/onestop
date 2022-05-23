@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::userHead"></head>
+<body>
+<div th:replace="layout/top::header"></div>
+
+<div class="container">
+
+    <div class="row align-items-start">
+
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar" th:replace="layout/adminmenu::menu('roles')"></nav>
+
+        <div style="padding-top:50px;" class="col">
+            <div class="container text-center">
+
+                <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/admin/roles}">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <div>총 건수 : <span th:text="${roles.totalElements}"> </span></div>
+                        <label for="searchText" class="sr-only">검색</label> &nbsp&nbsp&nbsp&nbsp
+                        <input type="text" class="form-control" id="searchText" name="searchText"
+                               th:value="${param.searchText}">
+                    </div>
+                    <button type="submit" class="btn btn-light mb-2">검색</button>
+                </form>
+
+                <div class="tbl_wrp">
+                    <table class="table">
+                        <thead>
+                        <tr class="table-info">
+                            <th scope="col">권한명</th>
+                            <th scope="col">권한설명</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="link_btn hover" th:each="role : ${roles}">
+                            <td style="text-align: center;">
+                                <a th:href="@{'/admin/roles/' + ${role.id}}"><span th:text="${role.roleName}">회원</span></a>
+                            </td>
+                            <td style="text-align: center;" th:text="${role.roleDesc}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="text-align:right;">
+                        <p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/roles/register}">권한 등록</a></p>
+                    </div>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${1 == roles.pageable.getPageNumber() +1} ? 'disabled'">
+                                <a class="page-link" href="#" th:href="@{/admin/roles(page=${roles.pageable.getPageNumber() - 1},searchText=${param.searchText})}">Previous</a>
+                            </li>
+
+                            <li class="page-item " th:classappend="${i == roles.pageable.getPageNumber() +1} ? 'disabled'"
+                                th:each="i  : ${#numbers.sequence(startPage,endPage)} ">
+                                <a class="page-link" href="#" th:text="${i}" th:href="@{/admin/roles(page=${i - 1},searchText=${param.searchText})}">1</a></li>
+
+                            <li class="page-item" th:classappend="${roles.totalPages == roles.pageable.getPageNumber() +1} ? 'disabled'">
+                                <a class="page-link" href="#" th:href="@{/admin/roles(page=${roles.pageable.getPageNumber() + 1},searchText=${param.searchText})}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="layout/footer::footer"></div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::userHead"></head>
+<body>
+<div th:replace="layout/top::header"></div>
+
+
+<div class="container">
+    <div class="row align-items-start">
+
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar" th:replace="layout/adminmenu::menu('delegate')"></nav>
+
+        <div style="padding-top:50px;" class="col">
+
+            <div class="container text-center">
+
+                <div class="text-right">
+                    <input type="text" id ="delegateGroup" ></input>
+                    <button type="button" class="btn btn-primary" th:onclick="|registerDelegate()|" > 그룹 등록</button>
+                </div>
+
+                <div class="tbl_wrp">
+                    <table class="table">
+                        <thead>
+                            <tr class="table-info">
+                                <th scope="col">이름</th>
+                                <th scope="col">권한</th>
+                                <th scope="col">추가</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="link_btn hover" th:each="delegate : ${delegates}">
+                                <td style="text-align: center;">
+                                    <a th:href="@{'/admin/delegate/' + ${delegate.id}}"><span th:text="${delegate.groupname}">그룹이름</span></a>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span th:each="delegateUser : ${delegate.delegateUsers}">
+                                        <h6 th:text="${delegateUser.username}"></h6>
+                                    </span>
+                                </td>
+                                <td>
+                                    <input type="text" th:id="'member-'+${delegate.id}" ></input>
+                                    <button type="button" class="btn btn-primary" th:text="${delegate.groupname}"
+                                            th:onclick="|registerDelegateUser(*{delegate.id})|" >
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/admin/delegateManager.js}"></script>
+
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+</html>

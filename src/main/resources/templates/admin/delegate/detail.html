@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::userHead"></head>
+<body>
+<div th:replace="layout/top::header"></div>
+
+    <div class="container">
+        </br>
+        <form class="form-horizontal" method="post" th:object="${delegate}">
+            <input th:type="hidden" name="delegateId" id ="delegateId" th:value="*{id}" />
+            <div class="form-group">
+                <label for="groupname" class="col-sm-2 control-label">그룹이름</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-large" name="groupname" id="groupname" placeholder="groupname" th:value="*{groupname}" required>
+                </div>
+            </div>
+
+<!--            <div class="form-group">-->
+<!--                <label for="delegate" class="col-sm-2 control-label">그룹 사용자</label>-->
+<!--                <div class="col-sm-10" th:each="delegateUser : ${delegate.delegateUsers}">-->
+<!--                    <input th:type="checkbox" name="delegate" id="delegate"-->
+<!--                           th:text="${delegateUser}"-->
+<!--                           th:value="${delegateUser}"-->
+<!--                           />-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <button type="button" class="btn btn-dark btn-lg" th:onclick="|modifyDelegate()|">수정</button>
+                    <a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/delegate}">목록 </a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+<script type="text/javascript" th:src="@{/js/admin/delegateManager.js}"></script>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+</html>
