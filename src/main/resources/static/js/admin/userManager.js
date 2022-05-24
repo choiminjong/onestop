@@ -34,7 +34,7 @@ async function updateUser() {
 
     if (error['status'] == '200') {
         alert("사용자 변경을 완료했습니다.");
-        location.href = "/admin/accounts";
+        location.href = "/clip/accounts";
     } else {
         alert("사용자 변경 실패했습니다.");
     }

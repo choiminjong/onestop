@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <!--head-->
 <head th:fragment="head">
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLIP 서비스</title>
     <!--clip-->
@@ -50,7 +49,7 @@
             <li th:classappend="${menu} == 'Settings'? 'active'">
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Settings</span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li th:classappend="${menuSub} == 'user'? 'active'" ><a href="/clip/userManagement">사용자 관리</a></li>
+                    <li th:classappend="${menuSub} == 'user'? 'active'" ><a href="/clip/accounts">사용자 관리</a></li>
                     <li th:classappend="${menuSub} == 'role'? 'active'" ><a href="/clip/roleManagement">권한 관리</a></li>
                     <li th:classappend="${menuSub} == 'resource'? 'active'" ><a href="/clip/resourceManagement">리소스 관리</a></li>
                     <li th:classappend="${menuSub} == 'group'? 'active'" ><a href="/clip/groupManagement">그룹/구성원 관리</a></li>
