@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/common :: head"></head>
+<body>
+<div id="wrapper">
+    <!--메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation"
+         th:replace="fragments/common :: menu('Settings','role')"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!--프로필-->
+        <div class="row border-bottom" th:replace="fragments/common :: profile"></nav></div>
+
+        <!--Content Body-->
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <!--사용자 리스트-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-title">규칙 관리 (총 : <span th:text="${roles.totalElements}"> </span>)</div>
+                        <div class="dmzt-container ibox-content p-md" id="group-container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <form class="form-inline d-flex justify-content-end" method="GET"
+                                          th:action="@{/clip/roles}">
+                                        <div class="form-group mx-sm-3 mb-2">
+                                            <label for="searchText" class="sr-only">검색</label> &nbsp&nbsp&nbsp&nbsp
+                                            <input type="text" class="form-control" id="searchText" name="searchText"
+                                                   th:value="${param.searchText}">
+                                        </div>
+                                        <button type="submit" class="btn btn-light mb-2">검색</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#roleRegister">규칙 등록
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table id="grid-groups" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th style="text-align: center">No</th>
+                                            <th style="text-align: center">권한명</th>
+                                            <th style="text-align: center">권한설명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="grid-groups-list" class="tbody-grid-groups-list">
+                                        <tr class="link_btn hover" th:each="role : ${roles}">
+                                            <td style="text-align: center;" th:text="${role.id}"></td>
+                                            <td style="text-align: center;">
+                                                <a th:href="@{'/clip/roles/' + ${role.id}}"><span th:text="${role.roleName}">회원</span></a>
+                                            </td>
+                                            <td style="text-align: center;" th:text="${role.roleDesc}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center">
+                                        <nav>
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item" th:classappend="${1 == roles.pageable.getPageNumber() +1} ? 'disabled'">
+                                                    <a class="page-link" href="#" th:href="@{/clip/roles(page=${roles.pageable.getPageNumber() - 1},searchText=${param.searchText})}">Previous</a>
+                                                </li>
+
+                                                <li class="page-item " th:classappend="${i == roles.pageable.getPageNumber() +1} ? 'disabled'"
+                                                    th:each="i  : ${#numbers.sequence(startPage,endPage)} ">
+                                                    <a class="page-link" href="#" th:text="${i}" th:href="@{/clip/roles(page=${i - 1},searchText=${param.searchText})}">1</a></li>
+
+                                                <li class="page-item" th:classappend="${roles.totalPages == roles.pageable.getPageNumber() +1} ? 'disabled'">
+                                                    <a class="page-link" href="#" th:href="@{/clip/roles(page=${roles.pageable.getPageNumber() + 1},searchText=${param.searchText})}">Next</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--row-->
+
+            <!--규칙 등록 Modal-->
+            <div class="modal fade" id="roleRegister" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">규칙 등록</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="roleName" class="col-form-label">roleName:</label>
+                                    <input type="text" class="form-control" id="roleName">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="roleDesc" class="col-form-label">roleDesc:</label>
+                                    <input type="text" class="form-control" id="roleDesc">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary dmzt-create-button" th:onclick="|registerRole()|">등록</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!--사용자 등록 Modal-->
+
+        </div><!--Content Body-->
+
+        <script type="text/javascript" th:src="@{/js/admin/roleManager.js}"></script>
+
+        <!--footer-->
+        <div class="footer" th:replace="fragments/common :: footer"></div>
+
+    </div>
+</div>
+</body>
+</html>

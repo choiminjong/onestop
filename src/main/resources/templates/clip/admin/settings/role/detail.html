@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/common :: head"></head>
+<body>
+<div id="wrapper">
+    <!--메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation"
+         th:replace="fragments/common :: menu('Settings','role')"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!--프로필-->
+        <div class="row border-bottom" th:replace="fragments/common :: profile"></nav></div>
+
+        <!--Content-->
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <!-- 규칙 관리-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-title">규칙 관리</div>
+                        <div class="dmzt-container ibox-content p-md">
+                            <form class="form-horizontal" method="post" th:object="${role}">
+                                <input th:type="hidden" id="roleId" name="roleId" th:value="*{id}" />
+                                <div class="form-group">
+                                    <label for="roleName" class="col-sm-2 control-label">권한명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control input-large" name="roleName" id="roleName" placeholder="roleName"
+                                               th:value="*{roleName}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="roleDesc" class="col-sm-2 control-label">권한설명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control input-large" name="roleDesc" id="roleDesc" placeholder="roleDesc"
+                                               th:value="*{roleDesc}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-lg-10">
+                                        <a class="btn btn-default dmzt-clear-form-button" th:href="@{/clip/roles}">목록 </a>
+                                        <button type="button" class="btn btn-primary dmzt-create-button" th:onclick="|modifyRole()|">수정</button>
+                                        <button type="button" class="btn btn-primary dmzt-create-button" th:onclick="|deleteRole()|">삭제</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- 규칙 관리-->
+        </div><!--Content-->
+
+        <script type="text/javascript" th:src="@{/js/admin/roleManager.js}"></script>
+
+        <!--footer-->
+        <div class="footer" th:replace="fragments/common :: footer"></div>
+    </div>
+
+</div>
+</body>
+</html>

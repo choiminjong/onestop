@@ -18,7 +18,7 @@ async function deleteRole() {
 
     if (error['status'] == '200') {
         alert("롤 삭제했습니다.");
-        location.href = "/admin/roles";
+        location.href = "/clip/roles";
     } else {
         alert("롤 삭제를 실패했습니다.");
     }
@@ -53,7 +53,7 @@ async function registerRole() {
 
     if (error['status'] == '200') {
         alert("롤을 추가했습니다.");
-        location.href = "/admin/roles";
+        location.href = "/clip/roles";
     } else {
         alert("롤 추가를 실패했습니다.");
     }
@@ -84,7 +84,7 @@ async function modifyRole() {
 
     if (error['status'] == '200') {
         alert("롤 수정했습니다.");
-        location.href = "/admin/roles";
+        location.href = "/clip/roles";
     } else {
         alert("롤 수정을 실패했습니다.");
     }

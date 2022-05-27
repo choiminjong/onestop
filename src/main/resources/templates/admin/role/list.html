@@ -41,10 +41,6 @@
                         </tbody>
                     </table>
 
-                    <div style="text-align:right;">
-                        <p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/roles/register}">권한 등록</a></p>
-                    </div>
-
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
                             <li class="page-item" th:classappend="${1 == roles.pageable.getPageNumber() +1} ? 'disabled'">
