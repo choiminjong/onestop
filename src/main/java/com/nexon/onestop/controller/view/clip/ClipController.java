@@ -49,15 +49,6 @@ public class ClipController {
         return "clip/admin/settings/groupManagement";
     }
 
-    @GetMapping("/roleManagement")
-    public String roleManagement(){
-        return "clip/admin/settings/roleManagement";
-    }
-
-    @GetMapping("/resourceManagement")
-    public String resourceManagement(){
-        return "clip/admin/settings/resourceManagement";
-    }
 
     @GetMapping("/employeeManagement")
     public String employeeManagement(){

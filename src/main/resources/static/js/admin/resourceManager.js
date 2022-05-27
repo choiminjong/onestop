@@ -23,7 +23,7 @@ async function registerResources() {
 
     if (error['status'] == '200') {
         alert("리소스를 추가했습니다.");
-        location.href = "/admin/resources";
+        location.href = "/clip/resources";
     } else {
         alert("리소스 추가를 실패했습니다.");
     }
@@ -56,7 +56,7 @@ async function modifyResources() {
 
     if (error['status'] == '200') {
         alert("리소스를 수정했습니다.");
-        location.href = "/admin/resources";
+        location.href = "/clip/resources";
     } else {
         alert("리소스 수정을 실패했습니다.");
     }

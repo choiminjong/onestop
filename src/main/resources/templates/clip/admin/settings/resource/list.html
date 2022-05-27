@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/common :: head"></head>
+<body>
+<div id="wrapper">
+    <!--메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation"
+         th:replace="fragments/common :: menu('Settings','resource')"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!--프로필-->
+        <div class="row border-bottom" th:replace="fragments/common :: profile"></nav></div>
+
+        <!--Content Body-->
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <!--사용자 리스트-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-title">리소스 관리 (총 : <span th:text="${resources.totalElements}"> </span>)</div>
+                        <div class="dmzt-container ibox-content p-md" id="group-container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <form class="form-inline d-flex justify-content-end" method="GET"
+                                          th:action="@{/clip/resources}">
+                                        <div class="form-group mx-sm-3 mb-2">
+                                            <label for="searchText" class="sr-only">검색</label> &nbsp&nbsp&nbsp&nbsp
+                                            <input type="text" class="form-control" id="searchText" name="searchText" th:value="${param.searchText}">
+                                        </div>
+                                        <button type="submit" class="btn btn-light mb-2">검색</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#resourceRegister">리소스 등록</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table id="grid-groups" class="table table-striped">
+                                        <thead>
+                                        <tr class="table-info">
+                                            <th style="text-align: center;" scope="col">순서</th>
+                                            <th style="text-align: center;" scope="col">리소스명</th>
+                                            <th style="text-align: center;" scope="col">리소스타입</th>
+                                            <th style="text-align: center;" scope="col">HttpMethod</th>
+                                            <th style="text-align: center;" scope="col">권한</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="grid-groups-list" class="tbody-grid-groups-list">
+                                        <tr class="link_btn hover" th:each="resource : ${resources}">
+                                            <td style="text-align: center;">
+                                                <a th:href="@{'/clip/resources/' + ${resource.id}}"><span th:text="${resource.resourceName}">회원</span></a>
+                                            </td>
+                                            <td style="text-align: center;" th:text="${resource.orderNum}"></td>
+                                            <td style="text-align: center;" th:text="${resource.resourceType}"></td>
+                                            <td style="text-align: center;" th:text="${resource.httpMethod}"></td>
+                                            <td style="text-align: center;" th:each="role : ${resource.roleSet}">
+                                                <span th:text="${role.roleName}"></span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item"
+                                                    th:classappend="${1 == resources.pageable.getPageNumber() +1} ? 'disabled'">
+                                                    <a class="page-link" href="#" th:href="@{/clip/resources(page=${resources.pageable.getPageNumber() - 1},searchText=${param.searchText})}">Previous</a>
+                                                </li>
+
+                                                <li class="page-item "
+                                                    th:classappend="${i == resources.pageable.getPageNumber() +1} ? 'disabled'"
+                                                    th:each="i  : ${#numbers.sequence(startPage,endPage)} ">
+                                                    <a class="page-link" href="#" th:text="${i}" th:href="@{/clip/resources(page=${i - 1},searchText=${param.searchText})}">1</a>
+                                                </li>
+
+                                                <li class="page-item"
+                                                    th:classappend="${resources.totalPages == resources.pageable.getPageNumber() +1} ? 'disabled'">
+                                                    <a class="page-link" href="#" th:href="@{/clip/resources(page=${resources.pageable.getPageNumber() + 1},searchText=${param.searchText})}">Next</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--row-->
+
+            <!--리소드 등록 Modal-->
+            <div class="modal fade" id="resourceRegister" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">리소스 등록</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="resourceName" class="col-form-label">resourceName:</label>
+                                    <input type="text" class="form-control" id="resourceName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="resourceType" class="col-form-label">resourceType:</label>
+                                    <input type="text" class="form-control" id="resourceType">
+                                </div>
+                                <div class="form-group">
+                                    <label for="httpMethod" class="col-form-label">httpMethod:</label>
+                                    <input type="text" class="form-control" id="httpMethod">
+                                </div>
+                                <div class="form-group">
+                                    <label for="orderNum" class="col-form-label">orderNum:</label>
+                                    <input type="text" class="form-control" id="orderNum">
+                                </div>
+                                <div class="form-group">
+                                    <div class="">
+                                        <label class="control-label">권한</label></br>
+                                        <select id="roleName" name="roleName" class="form-control">
+                                            <option th:each="role: ${roleList}"
+                                                    th:value="${role.roleName}"
+                                                    th:text="${role.roleName}"/>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary dmzt-create-button" th:onclick="|registerResources()|">등록</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!--리소스 등록 Modal-->
+
+        </div><!--Content Body-->
+
+        <script type="text/javascript" th:src="@{/js/admin/resourceManager.js}"></script>
+
+        <!--footer-->
+        <div class="footer" th:replace="fragments/common :: footer"></div>
+
+    </div>
+</div>
+</body>
+</html>

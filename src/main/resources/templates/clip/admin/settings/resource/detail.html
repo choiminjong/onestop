@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/common :: head"></head>
+<body>
+<div id="wrapper">
+    <!--메뉴-->
+    <nav class="navbar-default navbar-static-side" role="navigation"
+         th:replace="fragments/common :: menu('Settings','resource')"></nav>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!--프로필-->
+        <div class="row border-bottom" th:replace="fragments/common :: profile"></nav></div>
+
+        <!--Content-->
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <!-- 리소스 관리-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-title">리소스 관리</div>
+                        <div class="dmzt-container ibox-content p-md">
+                            <form class="form-horizontal" method="post" th:object="${resources}">
+                                <input th:type="hidden" name="resourceId" id="resourceId" th:value="*{id}" />
+                                <div class="form-group">
+                                    <label for="resourceName" class="col-sm-2 control-label">리소스명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control input-large" name="resourceName" id="resourceName" placeholder="리소스명" th:value="*{resourceName}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="resourceType" class="col-sm-2 control-label">리소스타입</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control input-large" name="resourceType" id="resourceType" placeholder="리소스타입" th:value="*{resourceType}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="httpMethod" class="col-sm-2 control-label">HttpMethod</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control input-large" name="httpMethod" id="httpMethod" placeholder="HttpMethod" th:value="*{httpMethod}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orderNum" class="col-sm-2 control-label">순서</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control input-large" name="orderNum" id="orderNum" placeholder="순서" th:value="*{orderNum}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="roleName" class="col-sm-2 control-label">권한</label>
+                                    <div class="col-sm-10">
+                                        <select class="custom-select" name="roleName" id="roleName">
+                                            <option th:each="role: ${roleList}"
+                                                    th:value="${role.roleName}"
+                                                    th:text="${role.roleName}"
+                                                    th:selected="${resources.roleSet.contains(role)} ? 'true' : 'false'"/>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-lg-10">
+                                        <a class="btn btn-default dmzt-clear-form-button" th:href="@{/clip/resources}">목록 </a>
+                                        <button type="button" class="btn btn-primary dmzt-create-button" th:onclick="|modifyResources()|">수정</button>
+                                        <a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{'/admin/resources/delete/' + *{id}}">삭제</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- 리소스 관리-->
+        </div><!--Content-->
+
+        <script type="text/javascript" th:src="@{/js/admin/resourceManager.js}"></script>
+
+        <!--footer-->
+        <div class="footer" th:replace="fragments/common :: footer"></div>
+    </div>
+
+</div>
+</body>
+</html>
