@@ -23,12 +23,6 @@ import java.util.List;
 @RequestMapping("/clip")
 public class ClipController {
 
-    @Autowired
-    private UserServiceImpl userServiceImpl;
-
-    @Autowired
-    private RoleServiceImpl roleServiceImpl;
-
     @GetMapping({"/",""})
     public String clip(){
         return "clip/admin/index";
@@ -69,37 +63,5 @@ public class ClipController {
     public String employeeManagement(){
         return "clip/admin/settings/employeeManagement";
     }
-
-
-    @GetMapping(value="/accounts")
-    public String userManagement(Model model,
-                           @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                           @RequestParam(required = false, defaultValue = "") String searchText ){
-
-        Page<Account> accounts = userServiceImpl.getUsers(searchText,pageable);
-
-        int startPage = Math.max(1,accounts.getPageable().getPageNumber() - 8);
-        int endPage = Math.min(accounts.getTotalPages(), accounts.getPageable().getPageNumber() + 8);
-
-        model.addAttribute("accounts",accounts);
-        model.addAttribute("endPage",endPage);
-        model.addAttribute("startPage", startPage);
-
-        return "clip/admin/settings/user/userManagement";
-    }
-
-
-    @GetMapping(value = "/accounts/{id}")
-    public String getUser(@PathVariable(value = "id") Long id, Model model) {
-
-        AccountDto accountDto = userServiceImpl.getUser(id);
-        List<Role> roleList = roleServiceImpl.getListRoles();
-
-        model.addAttribute("account", accountDto);
-        model.addAttribute("roleList", roleList);
-
-        return "clip/admin/settings/user/userDetailManagement";
-    }
-
 
 }

@@ -20,5 +20,4 @@ public class LoginApiController {
         userServiceImpl.createUser(account);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
-
 }
