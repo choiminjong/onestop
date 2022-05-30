@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,18 +54,23 @@ public class DelegateServiceImpl implements DelegateService {
     @Override
     @Transactional
     public void addDelegateUser(DelegateDto delegateDto) {
+        //delegateDto = DelegateDto(id=1, groupname=null, username=null, delegateUsers=[admin777, admin6666633])
 
         Delegate delegateAdd = delegateRepository.findById(delegateDto.getId())
                 .orElseThrow(()->{
                     return new UsernameNotFoundException("해당 그룹을 찾을 수 없습니다.");
                 });
 
-        DelegateUser delegateUser = DelegateUser.builder()
-                                    .username(delegateDto.getUsername())
-                                    .delegate(delegateAdd)
-                                    .build();
+        for (String username : delegateDto.getDelegateUsers()) {
 
-        delegateUserRepository.save(delegateUser);
+                DelegateUser delegateUser = DelegateUser.builder()
+                        .username(username)
+                        .delegate(delegateAdd)
+                        .build();
+
+                delegateUserRepository.save(delegateUser);
+        }
+
     }
 
     @Override

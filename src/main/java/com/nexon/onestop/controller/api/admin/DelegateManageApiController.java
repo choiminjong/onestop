@@ -34,6 +34,7 @@ public class DelegateManageApiController {
     @PostMapping(value="/delegate/member")
     public ResponseDto<Integer> addDelegateUser(@RequestBody DelegateDto delegateDto) throws Exception {
 
+        System.out.println("delegateDto = " + delegateDto);
         delegateServiceImpl.addDelegateUser(delegateDto);
 
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);

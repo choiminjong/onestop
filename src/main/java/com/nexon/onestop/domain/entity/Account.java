@@ -1,5 +1,7 @@
 package com.nexon.onestop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nexon.onestop.domain.audit.BaseTimeEntity;
 import lombok.*;
 import javax.persistence.*;
@@ -30,6 +32,7 @@ public class Account extends BaseTimeEntity {
 
     private String oauthType;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
     @JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") },
                inverseJoinColumns = { @JoinColumn(name = "role_id") })

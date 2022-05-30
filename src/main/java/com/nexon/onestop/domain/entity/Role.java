@@ -1,5 +1,6 @@
 package com.nexon.onestop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nexon.onestop.domain.eunm.Flag;
 import lombok.*;
 import javax.persistence.*;

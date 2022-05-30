@@ -44,26 +44,23 @@
                                 <div class="col-lg-12">
                                     <table id="grid-groups" class="table table-striped">
                                         <thead>
-                                            <tr class="table-info">
-                                                <th style="text-align: center;" scope="col">순서</th>
-                                                <th style="text-align: center;" scope="col">타입</th>
-                                                <th style="text-align: center;" scope="col">그룹 이름</th>
-                                                <th style="text-align: center;" scope="col">그룹 관리자</th>
+                                            <tr>
+                                                <th style="text-align: center">No</th>
+                                                <th style="text-align: center">타입</th>
+                                                <th style="text-align: center">그룹 이름</th>
+                                                <th style="text-align: center">그룹 관리자</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="grid-groups-list" class="tbody-grid-groups-list">
                                             <tr class="link_btn hover" th:each="delegate : ${delegates}">
-                                                <td style="text-align: center;">
-                                                    <span th:text="${delegate.id}"></span>
-                                                </td>
+                                                <td style="text-align: center;" th:text="${delegate.id}"></td>
                                                 <td style="text-align: center;">
                                                     <span>서비스 타입</span>
                                                 </td>
-                                                <td style="text-align: center;">
-                                                    <span th:text="${delegate.groupname}"></span>
-                                                </td>
-                                                <td style="text-align: center;" th:each="delegateUser : ${delegate.delegateUsers}">
-                                                    <span th:text="${delegateUser.username}"></span>
+                                                <td style="text-align: center;" th:text="${delegate.groupname}"></td>
+                                                <td style="text-align: center;" >
+                                                    <span th:each="delegateUser : ${delegate.delegateUsers}"><h5
+                                                            th:text="${delegateUser.username}"></h5></span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -87,7 +84,7 @@
                                         <div class="form-group">
                                             <label class="col-lg-1 control-label">Group Id</label>
                                             <div class="col-lg-11">
-                                                <input id="groupUserId" name="groupUserId" type="number" class="form-control disabled full-max-width" disabled/>
+                                                <input id="groupId" name="groupId" type="number" class="form-control disabled full-max-width" disabled/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -147,9 +144,86 @@
 
     </div>
     <script>
-        $(document).ready(function () {
-            $("#input-group-users").select2();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Grups Member 추가
+            const usersAdd = document.querySelector('#add-user-to-group-button');
+            usersAdd.addEventListener('click', addUsersData, false);
+
+            const gridrow= document.querySelector('#grid-groups-list');
+            gridrow.addEventListener('click', getGridRow, false);
+
         });
+
+        async function getGridRow(e){
+            /*
+            Group row 선택시 구성원관리 영역으로 데이터 셋업
+            */
+            const row = e.path[1];
+            const row_value = "";
+            const groupId  = row.cells[0].innerHTML;
+            document.querySelector('#groupId').value = groupId;
+
+        }
+
+        async function addUsersData(){
+            const groupId=$("#groupId").val();
+
+            if(groupId == ""){
+                document.querySelector('#groupId').focus();
+                alert("그룹을 선택해주세요.");
+                return false
+            }
+
+            let data = {
+                id: groupId,
+                delegateUsers: $("#input-group-users").val()
+            }
+
+            let url = "/admin/delegate/member"
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
+            });
+
+            let error = await response.json();
+
+            if (error['status'] == '200') {
+                alert("그룹 관리자를 추가했습니다.");
+                location.href = "http://localhost:8080/clip/delegate";
+            } else {
+                alert("그룹 관리자 추가를 실패했습니다.");
+            }
+        }
+
+        $(document).ready(function () {
+            $('#input-group-users').select2({
+                ajax: {
+                    url: '/admin/serch/accounts/',
+                    data: function (params,data) {
+                        var query = {
+                            searchText: params.term,
+                            type: 'public'
+                        }
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function (data){
+                        return {
+                            results: $.map(data.content, function(obj, index){
+                                return { id: obj.username, text: obj.username+" ("+obj.email+")"};
+                            })
+                        };
+                    },
+                }
+            });
+        });
+
+
+
     </script>
 </div>
 </body>
