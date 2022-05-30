@@ -70,7 +70,6 @@ public class DelegateServiceImpl implements DelegateService {
 
                 delegateUserRepository.save(delegateUser);
         }
-
     }
 
     @Override
