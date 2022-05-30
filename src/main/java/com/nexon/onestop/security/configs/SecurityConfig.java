@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("USER")
                 .antMatchers("/","/auth/**","/denied").permitAll()
                 .anyRequest().authenticated()
-                .and()
+        .and()
                 .formLogin()
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/login_proc")
@@ -83,8 +83,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/auth/login")) //인증되지 않았을 때의 동작을
                 .accessDeniedHandler(accessDeniedHandler())
 
-                .and()
-                //.addFilterBefore(customFilterSecurityInterceptor(),FilterSecurityInterceptor.class)
+        .and()
+                .addFilterBefore(customFilterSecurityInterceptor(),FilterSecurityInterceptor.class)
         ;
         http.csrf().disable();
     }

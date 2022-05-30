@@ -258,11 +258,11 @@
         $(document).ready(function () {
             $('#input-group-users').select2({
                 ajax: {
-                    url: '/admin/serch/accounts/',
+                    url: '/admin/serch/accounts',
                     data: function (params,data) {
                         var query = {
-                            type: 'public'
-                            searchText: params.term,
+                            type: 'public',
+                            searchText: params.term
                         }
                         // Query parameters will be ?search=[term]&type=public
                         return query;

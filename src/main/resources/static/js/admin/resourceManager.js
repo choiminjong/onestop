@@ -10,7 +10,9 @@ async function registerResources() {
         roleName: document.querySelector('#roleName').value
     }
 
-    let url = "/admin/resources"
+    console.log(data);
+
+    let url = "/admin/resources/"
     let response = await fetch(url, {
         method: 'POST',
         headers: {
