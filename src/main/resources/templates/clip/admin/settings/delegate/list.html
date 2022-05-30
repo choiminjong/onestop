@@ -60,8 +60,9 @@
                                                 </td>
                                                 <td style="text-align: center;" th:text="${delegate.groupname}"></td>
                                                 <td style="text-align: center;" >
-                                                    <span th:each="delegateUser : ${delegate.delegateUsers}"><h5
-                                                            th:text="${delegateUser.username}"></h5></span>
+                                                    <span th:each="delegateUser : ${delegate.delegateUsers}">
+                                                        <h5 th:text="${delegateUser.username}"></h5>
+                                                    </span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -141,7 +142,6 @@
 
                     <div class="modal-body">
                         <form>
-
                             <div class="form-group">
                                 <label for="delegateGroup" class="col-form-label">서비스:</label>
                                 <div >

@@ -45,6 +45,11 @@
                                             <th style="text-align: center">No</th>
                                             <th style="text-align: center">권한명</th>
                                             <th style="text-align: center">권한설명</th>
+                                            <th style="text-align: center">생성자</th>
+                                            <th style="text-align: center">생성일</th>
+                                            <th style="text-align: center">수정자</th>
+                                            <th style="text-align: center">수정일</th>
+
                                         </tr>
                                         </thead>
                                         <tbody id="grid-groups-list" class="tbody-grid-groups-list">
@@ -54,6 +59,10 @@
                                                 <a th:href="@{'/clip/roles/' + ${role.id}}"><span th:text="${role.roleName}">회원</span></a>
                                             </td>
                                             <td style="text-align: center;" th:text="${role.roleDesc}"></td>
+                                            <td style="text-align: center;" >생성자</td>
+                                            <td style="text-align: center;" >생성일</td>
+                                            <td style="text-align: center;" >수정자</td>
+                                            <td style="text-align: center;" >수정일</td>
                                         </tr>
                                         </tbody>
                                     </table>
