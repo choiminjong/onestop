@@ -35,6 +35,7 @@
                                             <input type="text" class="form-control" id="searchText" name="searchText" th:value="${param.searchText}">
                                         </div>
                                         <button type="submit" class="btn btn-light mb-2">검색</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#groupRegister">그룹 등록</button>
                                     </form>
                                 </div>
                             </div>
@@ -84,7 +85,8 @@
                                         <div class="form-group">
                                             <label class="col-lg-1 control-label">Group Id</label>
                                             <div class="col-lg-11">
-                                                <input id="groupId" name="groupId" type="number" class="form-control disabled full-max-width" disabled/>
+                                                <input id="groupId" name="groupId" type="hidden" class="form-control disabled full-max-width" disabled/>
+                                                <input id="groupName" name="groupName" class="form-control disabled full-max-width" disabled/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -102,32 +104,19 @@
                                                             <th>팀</th>
                                                         </tr>
                                                         </thead>
-                                                        <tbody id="grid-groups-user-list" class="tbody-grid-groups-user-list"></tbody>
+                                                        <tbody class="tbody-grid-groups-user-list"></tbody>
 
                                                     </table>
                                                 </form>
 
                                                 <div class="ibox-footer">
                                                     <div class="input-group">
-                                                        <select id="input-group-users" class="" style="width: 100%;"
-                                                                multiple="multiple"
-                                                                placeholder="User name is ..."></select>
+                                                        <select id="input-group-users" class="" style="width: 100%;" multiple="multiple" placeholder="User name is ..."></select>
                                                         <span class="input-group-btn">
-                                                        <button type="button" id="add-user-to-group-button"
-                                                                class="btn btn-primary"><span class="fa fa-plus"></span></button>
+                                                        <button type="button" th:onclick="|addUsersData()|" class="btn btn-primary"><span class="fa fa-plus"></span></button>
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-1 col-lg-11">
-                                                <button type="button" class="btn btn-default dmzt-clear-form-button">
-                                                    초기화
-                                                </button>
-                                                <button type="button" id="bds-search-list-add"
-                                                        class="btn btn-primary dmzt-create-button">추가
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -139,6 +128,51 @@
             </div>
         </div>
 
+        <!--사용자 등록 Modal-->
+        <div class="modal fade" id="groupRegister" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">그룹 등록</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form>
+
+                            <div class="form-group">
+                                <label for="delegateGroup" class="col-form-label">서비스:</label>
+                                <div >
+                                    <select id="" name="" class="form-control">
+                                        <option value="">-- 서비스 선택 --</option>
+                                        <option value="confluence">confluence</option>
+                                        <option value="jiralive">jiralive</option>
+                                        <option value="jiradev">jiradev</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="delegateGroup" class="col-form-label">delegateGroup:</label>
+                                <input type="text" class="form-control" id="delegateGroup">
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary dmzt-create-button" th:onclick="|registerDelegate()|">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div><!--사용자 등록 Modal-->
+
+
+        <script type="text/javascript" th:src="@{/js/admin/delegateManager.js}"></script>
+
         <!--footer-->
         <div class="footer" th:replace="fragments/common :: footer"></div>
 
@@ -147,9 +181,6 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             // Grups Member 추가
-            const usersAdd = document.querySelector('#add-user-to-group-button');
-            usersAdd.addEventListener('click', addUsersData, false);
-
             const gridrow= document.querySelector('#grid-groups-list');
             gridrow.addEventListener('click', getGridRow, false);
 
@@ -160,9 +191,34 @@
             Group row 선택시 구성원관리 영역으로 데이터 셋업
             */
             const row = e.path[1];
-            const row_value = "";
             const groupId  = row.cells[0].innerHTML;
+            const groupName  = row.cells[2].innerHTML;
             document.querySelector('#groupId').value = groupId;
+            document.querySelector('#groupName').value = groupName;
+
+            /*
+                const groupsUusersSsearch = document.querySelector('#groups-users-search').value
+                const url = "/rest/api/v1/setting/users/group/"+groupsUusersSsearch+"/member";
+
+                const response = await getRequest(url);
+                const tableRef = document.getElementById('grid-group-user').getElementsByTagName('tbody')[0];
+                tableRef.innerHTML = "";
+
+                if (response != ""){
+                    for (let index = 0; index < response.length; index++) {
+                        Type = response[index]['Type'] == "102001" ? "사용자" : "부서";
+
+                        tableRef.insertRow().innerHTML =
+                        "<th scope='row'>" + (index + 1).toString()+ "</th>" +
+                        "<td>" +response[index]['GroupName']+ "</td>"+
+                        "<td>" +response[index]['UserKey']+ "</td>"+
+                        "<td>" +response[index]['UserName']+ "</td>"+
+                        "<td>" +Type+ "</td>"+
+                        "<td><button type='button'class='btn btn-primary dmzt-create-button'\
+                            onclick=deleteUser('"+response[index]['GroupId']+"','"+response[index]['UserKey']+"')>삭제</button></td>";
+                    }
+                }
+             */
 
         }
 
@@ -205,8 +261,8 @@
                     url: '/admin/serch/accounts/',
                     data: function (params,data) {
                         var query = {
-                            searchText: params.term,
                             type: 'public'
+                            searchText: params.term,
                         }
                         // Query parameters will be ?search=[term]&type=public
                         return query;

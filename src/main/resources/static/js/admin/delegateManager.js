@@ -50,7 +50,7 @@ async function registerDelegate() {
 
     if (error['status'] == '200') {
         alert("그룹을 생성했습니다.");
-        location.href = "/admin/delegate";
+        location.href = "/clip/delegate";
     } else {
         alert("그룹 생성을 실패했습니다.");
     }
