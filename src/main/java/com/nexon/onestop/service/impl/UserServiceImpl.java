@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void validationDuplicationUser(Account account) {
-        if (userRepository.countByUsername(account.getUsername()) == 0) {
+        if (userRepository.countByUsername(account.getUsername()) < 0) {
             throw new UsernameNotFoundException("이미 존재하는 회원입니다." );
         }
     }

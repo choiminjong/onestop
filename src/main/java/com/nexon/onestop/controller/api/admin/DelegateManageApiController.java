@@ -11,6 +11,8 @@ import com.nexon.onestop.service.impl.DelegateServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -23,28 +25,27 @@ public class DelegateManageApiController {
     @Autowired
     private DelegateServiceImpl delegateServiceImpl;
 
+    @GetMapping(value="/delegate/{id}/members")
+    public ResponseEntity<DelegateDto> getdelegate(@PathVariable(value = "id") Long id) throws Exception {
+        DelegateDto delegate = delegateServiceImpl.getDelegate(id);
+        return new ResponseEntity<>(delegate, HttpStatus.OK);
+    }
+
     @PostMapping(value="/delegate")
     public ResponseDto<Integer> modifyDelegate(@RequestBody DelegateDto delegateDto) throws Exception {
-
         delegateServiceImpl.modifydelegate(delegateDto);
-
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
     @PostMapping(value="/delegate/member")
     public ResponseDto<Integer> addDelegateUser(@RequestBody DelegateDto delegateDto) throws Exception {
-
-        System.out.println("delegateDto = " + delegateDto);
         delegateServiceImpl.addDelegateUser(delegateDto);
-
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
     @PostMapping(value="/delegate/group")
     public ResponseDto<Integer> createDelegate(@RequestBody DelegateDto delegateDto) throws Exception {
-
         delegateServiceImpl.createDelegate(delegateDto);
-
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 

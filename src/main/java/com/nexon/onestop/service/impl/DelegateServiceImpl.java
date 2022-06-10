@@ -44,7 +44,8 @@ public class DelegateServiceImpl implements DelegateService {
 
         List<String> deletes =delegate.getDelegateUsers()
                 .stream()
-                .map(DelegateUser -> DelegateUser.getUsername())
+                .map(
+                        DelegateUser -> DelegateUser.getUsername())
                 .collect(Collectors.toList());
 
         delegateDto.setDelegateUsers(deletes);

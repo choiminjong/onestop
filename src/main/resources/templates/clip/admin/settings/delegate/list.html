@@ -45,26 +45,26 @@
                                 <div class="col-lg-12">
                                     <table id="grid-groups" class="table table-striped">
                                         <thead>
-                                            <tr>
-                                                <th style="text-align: center">No</th>
-                                                <th style="text-align: center">타입</th>
-                                                <th style="text-align: center">그룹 이름</th>
-                                                <th style="text-align: center">그룹 관리자</th>
-                                            </tr>
+                                        <tr>
+                                            <th style="text-align: center">No</th>
+                                            <th style="text-align: center">타입</th>
+                                            <th style="text-align: center">그룹 이름</th>
+                                            <th style="text-align: center">그룹 관리자</th>
+                                        </tr>
                                         </thead>
                                         <tbody id="grid-groups-list" class="tbody-grid-groups-list">
-                                            <tr class="link_btn hover" th:each="delegate : ${delegates}">
-                                                <td style="text-align: center;" th:text="${delegate.id}"></td>
-                                                <td style="text-align: center;">
-                                                    <span>서비스 타입</span>
-                                                </td>
-                                                <td style="text-align: center;" th:text="${delegate.groupname}"></td>
-                                                <td style="text-align: center;" >
+                                        <tr class="link_btn hover" th:each="delegate : ${delegates}">
+                                            <td style="text-align: center;" th:text="${delegate.id}"></td>
+                                            <td style="text-align: center;">
+                                                <span>서비스 타입</span>
+                                            </td>
+                                            <td style="text-align: center;" th:text="${delegate.groupname}"></td>
+                                            <td style="text-align: center;" >
                                                     <span th:each="delegateUser : ${delegate.delegateUsers}">
                                                         <h5 th:text="${delegateUser.username}"></h5>
                                                     </span>
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -98,11 +98,9 @@
                                                         <thead>
                                                         <tr>
                                                             <th>no</th>
+                                                            <th>groupname</th>
                                                             <th>username</th>
-                                                            <th>email</th>
-                                                            <th>법인</th>
-                                                            <th>실</th>
-                                                            <th>팀</th>
+                                                            <th>삭제</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody class="tbody-grid-groups-user-list"></tbody>
@@ -186,6 +184,36 @@
 
         });
 
+        async function deleteRequest(url,data){
+            return fetch(url,{
+                credentials: 'same-origin', // 'include', default: 'omit'
+                method: 'DELETE',              // 'GET', 'PUT', 'DELETE', etc.
+                body: JSON.stringify(data), // Coordinate the body type with 'Content-Type'
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                }),
+            }).then(function(response){
+                return response.json();
+            })
+        }
+
+
+        async function getRequest(url){
+            return fetch(url,{
+                credentials: 'same-origin', // 'include', default: 'omit'
+                method: 'GET',              // 'GET', 'PUT', 'DELETE', etc.
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                }),
+            }).then(function(response){
+
+                if (!response.ok){
+                    throw new Error("HTTP status " + response.status);
+                }
+                return response.json();
+            })
+        }
+
         async function getGridRow(e){
             /*
             Group row 선택시 구성원관리 영역으로 데이터 셋업
@@ -196,30 +224,22 @@
             document.querySelector('#groupId').value = groupId;
             document.querySelector('#groupName').value = groupName;
 
-            /*
-                const groupsUusersSsearch = document.querySelector('#groups-users-search').value
-                const url = "/rest/api/v1/setting/users/group/"+groupsUusersSsearch+"/member";
+            const url = "/admin/delegate/"+groupId+"/members";
+            const response = await getRequest(url);
 
-                const response = await getRequest(url);
-                const tableRef = document.getElementById('grid-group-user').getElementsByTagName('tbody')[0];
-                tableRef.innerHTML = "";
+            const tableRef = document.getElementById('grid-group-user').getElementsByTagName('tbody')[0];
+            tableRef.innerHTML = "";
 
-                if (response != ""){
-                    for (let index = 0; index < response.length; index++) {
-                        Type = response[index]['Type'] == "102001" ? "사용자" : "부서";
-
-                        tableRef.insertRow().innerHTML =
+            if (response != ""){
+                for (let index = 0; index < response.delegateUsers.length; index++) {
+                    tableRef.insertRow().innerHTML =
                         "<th scope='row'>" + (index + 1).toString()+ "</th>" +
-                        "<td>" +response[index]['GroupName']+ "</td>"+
-                        "<td>" +response[index]['UserKey']+ "</td>"+
-                        "<td>" +response[index]['UserName']+ "</td>"+
-                        "<td>" +Type+ "</td>"+
+                        "<td>" +groupName+ "</td>"+
+                        "<td>" +response.delegateUsers[index]+ "</td>"+
                         "<td><button type='button'class='btn btn-primary dmzt-create-button'\
-                            onclick=deleteUser('"+response[index]['GroupId']+"','"+response[index]['UserKey']+"')>삭제</button></td>";
-                    }
+                            onclick=deleteDelegetUser('"+groupId+"','"+response.delegateUsers[index]+"')>삭제</button></td>";
                 }
-             */
-
+            }
         }
 
         async function addUsersData(){
@@ -249,7 +269,7 @@
 
             if (error['status'] == '200') {
                 alert("그룹 관리자를 추가했습니다.");
-                location.href = "http://localhost:8080/clip/delegate";
+                //location.href = "http://localhost:8080/clip/delegate";
             } else {
                 alert("그룹 관리자 추가를 실패했습니다.");
             }
