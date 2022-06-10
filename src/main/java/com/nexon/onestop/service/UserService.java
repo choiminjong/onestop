@@ -14,4 +14,5 @@ public interface UserService {
     Page<Account> getUsers(String searchText ,Pageable pageable);
     AccountDto getUser(Long id);
     void deleteUser(Long id);
+    void validationDuplicationUser(Account account);
 }

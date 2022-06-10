@@ -19,6 +19,8 @@ async function joinForm(){
     });
 
     let error  = await response.json();
+    console.log(error);
+
 
     if(error['status'] == '200'){
         alert("회원가입이 완료되었습니다.");

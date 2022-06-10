@@ -36,13 +36,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(Account account) {
 
+        validationDuplicationUser(account);
+
         Role role = roleRepository.findByroleName("ROLE_USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         account.setUserRoles(roles);
 
         account.setPassword((passwordEncoder.encode(account.getPassword())));
+        //System.out.println("account = " + account);
         userRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public void validationDuplicationUser(Account account) {
+        if (userRepository.countByUsername(account.getUsername()) == 0) {
+            throw new UsernameNotFoundException("이미 존재하는 회원입니다." );
+        }
     }
 
     @Transactional
@@ -98,5 +109,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+
 
 }

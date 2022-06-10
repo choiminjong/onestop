@@ -18,9 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
+@RequestMapping("/auth")
 public class LoginController {
 
-    @RequestMapping(value="/auth/login")
+    @RequestMapping(value="/login")
     public String login(@RequestParam(value = "error", required = false) String error,
                         @RequestParam(value = "exception", required = false) String exception, Model model){
 
@@ -30,7 +31,7 @@ public class LoginController {
         return "/login";
     }
 
-    @GetMapping("/auth/logout")
+    @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,7 +43,7 @@ public class LoginController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping(value={"/auth/denied"})
+    @GetMapping(value={"/denied"})
     public String accessDenied(@RequestParam(value="exception",required = false) String exception, Principal principal, Model model) throws Exception {
 
         Account account = null;
@@ -58,7 +59,7 @@ public class LoginController {
         return "denied";
     }
 
-    @GetMapping("/auth/join")
+    @GetMapping("/join")
     public String joinForm(){
         return "login/register";
     }

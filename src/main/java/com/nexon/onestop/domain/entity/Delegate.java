@@ -16,7 +16,7 @@ import java.util.List;
 public class Delegate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "delegate_id")
     private Long id;
 
